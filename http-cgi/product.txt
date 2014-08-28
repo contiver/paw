@@ -1,0 +1,4 @@
+3040,remera,$200
+1000,zapatos,$500
+222,pantalon,$1000
+

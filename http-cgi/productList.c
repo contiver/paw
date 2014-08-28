@@ -8,10 +8,14 @@ main(void){
     FILE *fp = fopen("products.txt", "r");
 
     printf("Server: Apache/2\n"
-           "Content-type: text/html\n\n"
-           "<html><body><h1>Lista de Productos</h1>");
+           "Content-type: text/html\n\n");
+    if (fp == NULL){
+        printf("<html><body><h1>No se encontró lista de productos</h1></body></html>");
+	return 0;
+    }
+    printf("<html><body><h1>Lista de Productos</h1>\n");
 
-    printf("<h2>%s</h2>", qs);
+    if(qs != NULL) printf("<h2>%s</h2>", qs);
 
     while( (c = fgetc(fp)) != EOF){
         printf("<ul><li>%c",c);
@@ -24,6 +28,7 @@ main(void){
 
     printf("</body></html>");
 
+    free(qs);
     fclose(fp);
     return 0;
 }

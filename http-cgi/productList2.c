@@ -11,22 +11,35 @@ main(void){
            "Content-type: text/html\n\n");
     if (fp == NULL){
         printf("<html><body><h1>No se encontro lista de productos</h1></body></html>");
-	return 0;
+	    return 0;
     }
     printf("<html><body><h1>Lista de Productos</h1>\n");
-    printf("<table><tr><td>Codigo");
+    printf("<table><tr><td>Codigo</td><td>Nombre</td><td>Precio</td></tr>");
 
-    while( (c = fgetc(fp)) != EOF){
-        printf("<tr><td>%c",c);
-        while( (c = fgetc(fp)) != '\n'){
-            if (c == ',') printf("</td><td>");
-            else printf("%c",c);
+    int code, price, from, to;
+    char name[20];
+    char *line = NULL;
+    size_t len = 0;
+
+    if(qs != NULL){
+        sscanf(qs, "%[^f]from=%d", &from);
+        sscanf(qs, "%[^t]to=%d", &to);
+        while ( getline(&line, &len, fp) != -1 ){
+            sscanf(line, "%d,%[^,],%d", &code, name, &price);
+            if(from <= price && price <= to){
+                printf("<tr><td>%d</td><td>%s</td><td>%d</td></tr>", code, name, price);
+            }
         }
-        printf("</td></tr>");
+    }else{
+        while ( getline(&line, &len, fp) != -1 ){
+            sscanf(line, "%d,%[^,],%d", &code, name, &price);
+            printf("<tr><td>%d</td><td>%s</td><td>%d</td></tr>", code, name, price);
+        }
     }
 
     printf("</table></body></html>");
 
+    free(line);
     fclose(fp);
-    return 0;
+    exit(EXIT_SUCCESS);
 }

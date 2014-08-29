@@ -15,17 +15,18 @@ main(void){
     printf("<html><body><h1>Lista de Productos</h1>\n");
     printf("<table><tr><td>Codigo");
 
-    while( (c = fgetc(fp)) != EOF){
-        printf("<tr><td>%c",c);
-        while( (c = fgetc(fp)) != '\n'){
-            if (c == ',') printf("</td><td>");
-            else printf("%c",c);
-        }
-        printf("</td></tr>");
+    int code, price;
+    size_t len = 0;
+    char name[20];
+    char *line = NULL;
+    while ( getline(&line, &len, fp) != -1 ){
+        sscanf(line, "%d,%[^,],%d", &code, name, &price);
+        printf("<tr><td>%d</td><td>%s</td><td>%d</td></tr>", code, name, price);
     }
 
     printf("</table></body></html>");
 
+    free(line);
     fclose(fp);
     return 0;
 }

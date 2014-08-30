@@ -20,10 +20,15 @@ main(void){
     char name[20];
     char *line = NULL;
     size_t len = 0;
+    char attr[2][20];
+    int i;
 
-    if(qs != NULL){
-        sscanf(qs, "%[^f]from=%d", &from);
-        sscanf(qs, "%[^t]to=%d", &to);
+    if( qs != "" ){ // FIXME buscar la condición correcta para un query string vacio!
+        sscanf(qs,"%[^&]&%s", attr[0], attr[1]);
+	for(i = 0; i < 2; i++){
+            sscanf(attr[i], "from=%d", &from);
+            sscanf(attr[i], "to=%d", &to);
+        }
         while ( getline(&line, &len, fp) != -1 ){
             sscanf(line, "%d,%[^,],%d", &code, name, &price);
             if(from <= price && price <= to){
